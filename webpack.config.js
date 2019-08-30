@@ -8,6 +8,7 @@ const ROOT_PATH = path.resolve(__dirname);
 const ENTRY_PATH = path.resolve(ROOT_PATH, 'src');
 const OUTPUT_PATH = path.resolve(ROOT_PATH, 'dist');
 const config = require('./config/config');
+const devMode = process.env.NODE_ENV !== 'production';
 module.exports = {
     entry: {
         index: [
@@ -28,20 +29,73 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.less$/,
-                use: [
-                    { loader: 'style-loader' },
-                    { loader: 'css-loader' },
-                    { loader: 'less-loader' }
+                test: /\.(js|jsx)?$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        babelrc: true
+                    }
+                }
+            },
+            {
+                test: /\.css$/,
+                exclude: [
+                    /node_modules/,
+                ],
+                use: ['style-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: true,
+                            localIdentName: '[name]-[local]-[hash:base64:5]',
+                            importLoaders: 1
+                        }
+                    },
+                    'postcss-loader'
                 ]
             },
             {
-                test: /\.js$/,
+                test: /\.css$/,
+                include: [
+                    /node_modules/,
+                ],
+                use: ['style-loader',
+                    {
+                        loader: 'css-loader'
+                    },
+                    'postcss-loader'
+                ]
+            },
+            {
+                test: /\.less$/,
+                use: [
+                    { loader: "style-loader" },
+                    { loader: 'css-loader' },
+                    { loader: "postcss-loader" },
+                    {
+                        loader: "less-loader",
+                        options: {
+                            javascriptEnabled: true
+                        }
+                    }]
+            },
+            {
+                test: /\.(png|jpg|gif|JPG|GIF|PNG|BMP|bmp|JPEG|jpeg)$/,
                 exclude: /node_modules/,
                 use: [
-                    { loader: 'babel-loader' }
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            limit: 8192
+                        }
+                    }
                 ]
-            }
+            },
+            {
+                test: /\.(eot|woff|ttf|woff2|svg)$/,
+                use: 'url-loader'
+            },
         ]
     },
     plugins: [
