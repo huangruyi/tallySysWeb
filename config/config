@@ -1,0 +1,18 @@
+module.exports = {
+    host:process.env.HOST || '127.0.0.1',
+    port:process.env.PORT ||(process.env.NODE_ENV === 'production'?8080:3000),
+    app:{
+        title:"tallySys",
+        description:'this is react project',
+        head:{
+            titleTemplate:' ',
+            meta:[
+                {
+                    name:"description",
+                    content:"react express demo"
+                },
+                {charset:"utf-8"}
+            ]
+        }
+    }
+}
