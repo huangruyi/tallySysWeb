@@ -2,8 +2,10 @@ import React, { Component } from 'react'
 import SiderLeft from '../components/SiderLeft'
 import HeaderTop from '../components/Header'
 import FooterBottom from '../components/Footer'
+import NotFound from '../components/NotFound'
 import { Layout, Menu, Icon } from 'antd'
 import './style.less'
+import './reset.css'
 const { Header, Footer, Sider, Content } = Layout;
 
 class Admin extends Component {
@@ -17,31 +19,25 @@ class Admin extends Component {
         });
     };
     render() {
+        const { collapsed } = this.state;
         return (
             <Layout>
-                <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-                    <SiderLeft />
+                <Sider trigger={null} collapsible collapsed={collapsed}>
+                    <SiderLeft collapsed={collapsed}/>
                 </Sider>
                 <Layout>
-                    <Header style={{ background: '#fff', padding: 0 }}>
+                    <Header className="header">
                         <div>
                             <Icon
                                 className="trigger"
-                                type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                                type={collapsed ? 'menu-unfold' : 'menu-fold'}
                                 onClick={this.toggle}
                             />
                             <HeaderTop />
                         </div>
                     </Header>
-                    <Content
-                        style={{
-                            margin: '24px 16px',
-                            padding: 24,
-                            background: '#fff',
-                            minHeight: 280,
-                        }}
-                    >
-                        Content
+                    <Content className="content">
+                        {/* <NotFound /> */}
                     </Content>
                     <Footer>
                         <FooterBottom />

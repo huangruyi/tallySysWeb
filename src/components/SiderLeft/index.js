@@ -1,13 +1,20 @@
 import React, { Component } from 'react'
 import { Menu, Icon } from 'antd'
+import logo from '../../../public/logo.png'
 import './style.less'
 
 class SiderLeft extends Component {
 
     render() {
+        const { collapsed } = this.props;
         return (
             <div style={{ height: '100vh' }}>
-                <div className="logo"></div>
+                <div className="logo">
+                    <img src={logo} />
+                    {
+                        !collapsed && <span>TallySysWeb</span>
+                    }                   
+                </div>
                 <Menu theme="dark" mode="inline" defaultSelectedKeys={['home']}>
                     <Menu.Item key="home">
                         <Icon type="home" />
