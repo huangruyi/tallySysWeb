@@ -4,10 +4,10 @@ module.exports = {
     apiHost:process.env.APIHOST || '192.168.1.225',
     apiPort:process.env.APIPORT || '2335',
     app:{
-        title:"webPointCloudApp",
+        title:"tallySysWeb",
         description:'this is react project',
         head:{
-            titleTemplate:'boshan',
+            titleTemplate:'tallySysWeb',
             meta:[
                 {
                     name:"description",

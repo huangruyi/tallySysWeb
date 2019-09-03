@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
-import { Menu } from 'antd'
+import { Menu, Icon } from 'antd'
+import './style.less'
 
 class SiderLeft extends Component {
 
     render() {
         return (
             <div style={{ height: '100vh' }}>
+                <div className="logo"></div>
                 <Menu theme="dark" mode="inline" defaultSelectedKeys={['home']}>
                     <Menu.Item key="home">
                         <Icon type="home" />
@@ -26,7 +28,7 @@ class SiderLeft extends Component {
                     <Menu.Item key="spending">
                         <Icon type="upload" />
                         <span>支出管理</span>
-                    </Menu.Item>                   
+                    </Menu.Item>
                 </Menu>
             </div>
         )

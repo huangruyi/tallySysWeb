@@ -11,11 +11,11 @@ const port = config.port;
 
 app.use('/', connectHistoryApiFallback());
 app.use('/',Express.static(path.join(__dirname,"..",'build')));
-app.use('/',Express.static(path.join(__dirname,"..",'static')));
+app.use('/',Express.static(path.join(__dirname,"..",'public')));
 
 
 app.use(compression());
-app.use(favicon(path.join(__dirname,'..','static','favicon.ico')));
+app.use(favicon(path.join(__dirname,'..','public','favicon.ico')));
 
 //热更新
 if(process.env.NODE_ENV!=='production'){
