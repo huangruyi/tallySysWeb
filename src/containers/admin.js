@@ -37,7 +37,8 @@ class Admin extends Component {
                         </div>
                     </Header>
                     <Content className="content">
-                        {/* <NotFound /> */}
+                    {console.log(this.props)}
+                        {this.props.children}
                     </Content>
                     <Footer>
                         <FooterBottom />
