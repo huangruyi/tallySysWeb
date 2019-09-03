@@ -33,7 +33,6 @@ class IRouter extends Component {
                             </Switch>
                         </Admin>
                     } />
-                    <Route component={NotFound} />
                 </div>
             </Router>
         )
