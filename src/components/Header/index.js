@@ -5,13 +5,14 @@ import './style.less'
 
 class Header extends Component {
 
+    logout = () => {
+        console.log('退出登录')
+    }
+
     render() {
         const menu = (
             <Menu>
-                <Menu.Item>
-                    个人信息
-                </Menu.Item>
-                <Menu.Item>
+                <Menu.Item  onClick={this.logout}>
                     退出登录
                 </Menu.Item>
             </Menu>

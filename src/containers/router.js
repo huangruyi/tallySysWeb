@@ -3,8 +3,6 @@ import {
     BrowserRouter as Router,
     Route,
     Switch,
-    Redirect,
-    IndexRedirect
 } from 'react-router-dom'
 import Admin from './admin'
 import Login from './login'
@@ -20,19 +18,23 @@ class IRouter extends Component {
         return (
             <Router>
                 <div>
-                    <Route path='/login' component={Login} />
-                    <Route path='/' render={() =>
-                        <Admin>
-                            <Switch>
-                                <Route path='/home' component={Home} />
-                                <Route path='/incomeManage' component={Income} />
-                                <Route path='/userCenter' component={User} />
-                                <Route path='/spendingManage' component={Spending} />
-                                <Route path='/storageManage' component={StorageManage} />
-                                <Route component={NotFound}/>   
-                            </Switch>
-                        </Admin>
-                    } />
+                    <Switch>
+                        <Route path='/login' component={Login} />
+                        <Route path='/' render={() =>
+                            <Admin>
+                                <Switch>
+                                    <Route path='/home' exact component={Home} />
+                                    <Route path='/incomeManage' exact component={Income} />
+                                    <Route path='/userCenter' exact component={User} />
+                                    <Route path='/spendingManage' exact component={Spending} />
+                                    <Route path='/storageManage' exact component={StorageManage} />
+                                    <Route path='/' exact component={Home} />
+                                    {/* <Route component={NotFound} /> */}
+                                </Switch>
+                            </Admin>
+                        } />
+                        <Route component={NotFound} />
+                    </Switch>
                 </div>
             </Router>
         )

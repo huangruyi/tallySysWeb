@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withRouter } from 'react-router'
 import SiderLeft from '../components/SiderLeft'
 import HeaderTop from '../components/Header'
 import FooterBottom from '../components/Footer'
@@ -20,10 +21,15 @@ class Admin extends Component {
     };
     render() {
         const { collapsed } = this.state;
+        const { location } = this.props;
+        console.log(this.props.location)
         return (
             <Layout>
                 <Sider trigger={null} collapsible collapsed={collapsed}>
-                    <SiderLeft collapsed={collapsed}/>
+                    <SiderLeft
+                        collapsed={collapsed}
+                        routeLinkurl={location.pathname}
+                    />
                 </Sider>
                 <Layout>
                     <Header className="header">
@@ -37,7 +43,6 @@ class Admin extends Component {
                         </div>
                     </Header>
                     <Content className="content">
-                    {console.log(this.props)}
                         {this.props.children}
                     </Content>
                     <Footer>
@@ -50,4 +55,4 @@ class Admin extends Component {
 
 }
 
-export default Admin;
+export default withRouter(Admin);
