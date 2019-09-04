@@ -41,7 +41,7 @@ class User extends Component {
         return (
 
             <div>
-                <Card title="查看个人信息">
+                <Card>
                     <Form layout="horizontal">
                         <FormItem label="头像" {...Common.layout.formItemLayout}>
                             <img src={userInfo.sLogo == null ? defaultAvatar : userInfo.sLogo} style={{ width: 100 }} />

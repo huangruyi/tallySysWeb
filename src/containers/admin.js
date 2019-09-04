@@ -3,8 +3,8 @@ import { withRouter } from 'react-router'
 import SiderLeft from '../components/SiderLeft'
 import HeaderTop from '../components/Header'
 import FooterBottom from '../components/Footer'
-import NotFound from '../components/NotFound'
-import { Layout, Menu, Icon } from 'antd'
+import FreeScrollBar from 'react-free-scrollbar';
+import { Layout, Icon } from 'antd'
 import './style.less'
 import './reset.css'
 const { Header, Footer, Sider, Content } = Layout;
@@ -22,7 +22,6 @@ class Admin extends Component {
     render() {
         const { collapsed } = this.state;
         const { location } = this.props;
-        console.log(this.props.location)
         return (
             <Layout>
                 <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -43,7 +42,13 @@ class Admin extends Component {
                         </div>
                     </Header>
                     <Content className="content">
-                        {this.props.children}
+
+                        <FreeScrollBar>
+                            <div className="container">
+                                {this.props.children}
+                            </div>
+                        </FreeScrollBar>
+
                     </Content>
                     <Footer>
                         <FooterBottom />
