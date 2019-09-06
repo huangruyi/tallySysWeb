@@ -43,11 +43,11 @@ class Admin extends Component {
                     </Header>
                     <Content className="content">
 
-                        <FreeScrollBar>
-                            <div className="container">
-                                {this.props.children}
-                            </div>
-                        </FreeScrollBar>
+                        {/* <FreeScrollBar> */}
+                        <div className="container">
+                            {this.props.children}
+                        </div>
+                        {/* </FreeScrollBar> */}
 
                     </Content>
                     <Footer>
