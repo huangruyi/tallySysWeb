@@ -1,0 +1,25 @@
+import { combineReducers } from 'redux'
+import login from './login'
+const initialState = {
+
+};
+
+export const actionsTypes = {
+};
+
+export const actions = {
+
+};
+
+export function reducer(state = initialState, action) {
+    switch (action.type) {
+
+        default:
+            return state
+    }
+}
+
+export default combineReducers({
+    login,
+    globalState: reducer
+})
