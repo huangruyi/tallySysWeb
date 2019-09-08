@@ -35,6 +35,11 @@ const moduleList = [
         sName: '支出管理',
         sLinkurl: '/spendingManage',
         sIcon: 'account-book',        
+    },
+    {
+        sName: '类型管理',
+        sLinkurl: '/typeManage',
+        sIcon: 'star',        
     }
 ]
 export default moduleList;

@@ -1,5 +1,6 @@
 const initialState = {
     userInfo: {},
+    isGetUserInfo: false,
 };
 
 export const actionsTypes = {
@@ -25,6 +26,10 @@ export const actions = {
 
 export function reducer(state = initialState, action) {
     switch (action.type) {
+        case actionsTypes.SAVE_USER_INFO:
+            return {
+                ...state, userInfo: action.userInfo, isGetUserInfo: action.isGetUserInfo
+            }
         default:
             return state
     }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Redirect, Link } from 'react-router-dom'
 import { Card, Form, Icon, Input, Button, Checkbox } from 'antd'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -17,42 +18,48 @@ class Login extends Component {
     }
 
     render() {
+        const { isHasToken } = this.props;
         const { getFieldDecorator } = this.props.form;
         return (
-            <Card>
-                <Form onSubmit={this.handleSubmit} className="login-form">
-                    <Form.Item>
-                        {getFieldDecorator('username', {
-                            rules: [{ required: true, message: '请输入用户名!' }],
-                        })(
-                            <Input
-                                prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                placeholder="Username"
-                            />,
-                        )}
-                    </Form.Item>
-                    <Form.Item>
-                        {getFieldDecorator('password', {
-                            rules: [{ required: true, message: '请输入密码!' }],
-                        })(
-                            <Input
-                                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                type="password"
-                                placeholder="Password"
-                            />,
-                        )}
-                    </Form.Item>
-                    <Form.Item>
-                        {getFieldDecorator('remember', {
-                            valuePropName: 'checked',
-                            initialValue: true,
-                        })(<Checkbox>记住我</Checkbox>)}
-                        <a className="login-form-forgot" href="">忘记密码</a>
-                        <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>
-                        或者 <a href="">现在注册!</a>
-                    </Form.Item>
-                </Form>
-            </Card>
+            <div>
+                <Card style={{ top: 100, width: 400, margin: 'auto' }}>
+                    <Form onSubmit={this.handleSubmit} className="login-form">
+                        <Form.Item>
+                            {getFieldDecorator('username', {
+                                rules: [{ required: true, message: '请输入用户名!' }],
+                            })(
+                                <Input
+                                    prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                    placeholder="Username"
+                                />,
+                            )}
+                        </Form.Item>
+                        <Form.Item>
+                            {getFieldDecorator('password', {
+                                rules: [{ required: true, message: '请输入密码!' }],
+                            })(
+                                <Input
+                                    prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                    type="password"
+                                    placeholder="Password"
+                                />,
+                            )}
+                        </Form.Item>
+                        <Form.Item>
+                            {getFieldDecorator('remember', {
+                                valuePropName: 'checked',
+                                initialValue: true,
+                            })(<Checkbox>记住我</Checkbox>)}
+                            <Link className="login-form-forgot" to="/user/forget">忘记密码</Link>
+                            <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>
+                            或者 <Link to="/user/register">现在注册!</Link>
+                        </Form.Item>
+                    </Form>
+                </Card>
+                {
+                    isHasToken && <Redirect to={{ pathname: '/home' }} />
+                }
+            </div>
         );
     }
 }
@@ -60,7 +67,7 @@ const LoginForm = Form.create()(Login);
 
 function mapStateToProps(state) {
     return {
-
+        isHasToken: state.globalState.isHasToken
     }
 }
 function mapDispatchToProps(dispatch) {

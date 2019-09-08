@@ -1,9 +1,14 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment, Children } from 'react'
+import { Redirect } from 'react-router-dom'
 import { withRouter } from 'react-router'
 import SiderLeft from '../../components/SiderLeft'
 import HeaderTop from '../../components/Header'
 import FooterBottom from '../../components/Footer'
 import { Layout, Icon } from 'antd'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions as LoginActions } from '../../reducers/login'
+import { actions as IndexActions } from '../../reducers'
 import '../style.less'
 import '../reset.css'
 const { Header, Footer, Sider, Content } = Layout;
@@ -13,6 +18,17 @@ class Admin extends Component {
         collapsed: false,
     };
 
+    componentWillMount = () => {
+        const token = localStorage.getItem('Btoken');
+        if (token) {
+            this.props.setTokenStatus();
+            this.props.getUserInfo();
+        } else {
+            this.props.setTokenStatus(false);
+        }
+
+    }
+
     toggle = () => {
         this.setState({
             collapsed: !this.state.collapsed,
@@ -20,9 +36,67 @@ class Admin extends Component {
     };
     render() {
         const { collapsed } = this.state;
-        const { location } = this.props;
+        const { location, userInfo, isHasToken, isLoading, children, isGetUserInfo } = this.props;
         return (
-            <Layout>
+            <Fragment>
+                {
+                    isLoading 
+                    ?
+                    console.log("It is loading.")
+                    :
+                    !isHasToken
+                        ?
+                        <Redirect to={{ pathname: '/user/login' }} />
+                        :
+                        <Fragment>
+                            {
+                                !isGetUserInfo
+                                    ?
+                                    console.log("It is request userInfo.")
+                                    :
+                                    <LayoutUI
+                                        location={location}
+                                        userInfo={userInfo}
+                                        collapsed={collapsed}
+                                        toggle={this.toggle}
+                                        children={children}
+                                    />
+                            }
+                        </Fragment>
+
+                }
+            </Fragment>
+
+        )
+    }
+}
+
+function mapStateToProps(state) {
+    return {
+        userInfo: state.login.userInfo,
+        isHasToken: state.globalState.isHasToken,
+        isLoading: state.globalState.isLoading,
+        isGetUserInfo: state.login.isGetUserInfo
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        getUserInfo: bindActionCreators(LoginActions.getUserInfo, dispatch),
+        setTokenStatus: bindActionCreators(IndexActions.setTokenStatus, dispatch)
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withRouter(Admin))
+
+class LayoutUI extends Component {
+    render() {
+        const { location, userInfo, collapsed, toggle, children } = this.props;
+        return (
+            < Layout >
                 <Sider trigger={null} collapsible collapsed={collapsed}>
                     <SiderLeft
                         collapsed={collapsed}
@@ -35,24 +109,21 @@ class Admin extends Component {
                             <Icon
                                 className="trigger"
                                 type={collapsed ? 'menu-unfold' : 'menu-fold'}
-                                onClick={this.toggle}
+                                onClick={toggle}
                             />
-                            <HeaderTop />
+                            <HeaderTop userInfo={userInfo} />
                         </div>
                     </Header>
                     <Content className="content">
                         <div className="container">
-                            {this.props.children}
+                            {children}
                         </div>
                     </Content>
                     <Footer>
                         <FooterBottom />
                     </Footer>
                 </Layout>
-            </Layout>
+            </Layout >
         )
     }
-
 }
-
-export default withRouter(Admin);

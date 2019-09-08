@@ -78,9 +78,7 @@ class Income extends Component {
                                 columns={columns}
                                 bordered
                                 size='small'
-                            >
-
-                            </Table>
+                            />
                         </Card>
                     </Col>
                     <Col span={10}>

@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import Common from '../../../common/common'
 import defaultAvatar from '../../../../public/default.png'
-import { Card, Form, Button, Modal, Breadcrumb  } from 'antd'
+import { Card, Form, Button, Modal, Breadcrumb } from 'antd'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import EditInfo from './editInfo'
 import ModifyPwd from './modifyPwd'
 import './style.less'
@@ -12,15 +14,6 @@ class User extends Component {
         isEditVisible: false,
         isModifyVisible: false,
         confirmLoading: false,
-        userInfo: {
-            sLogo: null,
-            sUsername: 'Admin',
-            sName: '管理员',
-            sEmail: '1243916844@qq.com',
-            sPhone: '12345678901',
-            dLastlogin: '2019-09-03 14:54:46',
-            sDesc: '这是管理员用户'
-        }
     }
 
     editUserInfo = () => {
@@ -37,7 +30,8 @@ class User extends Component {
 
 
     render() {
-        const { userInfo, isEditVisible, confirmLoading, isModifyVisible } = this.state;
+        const { isEditVisible, confirmLoading, isModifyVisible } = this.state;
+        const { userInfo } = this.props;
         return (
 
             <div>
@@ -114,4 +108,18 @@ class User extends Component {
     }
 }
 
-export default User;
+function mapStateToProps(state) {
+    return {
+        userInfo: state.login.userInfo
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+
+    }
+}
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(User);
