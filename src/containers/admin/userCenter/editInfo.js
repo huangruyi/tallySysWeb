@@ -15,7 +15,7 @@ class EditInfo extends Component {
                 uid: '-1',
                 name: 'logo.png',
                 status: 'done',
-                thumbUrl: this.props.userInfo.sLogo == null ? defaultAvatar : this.props.userInfo.sLogo,
+                thumbUrl: this.props.userInfo.sLogo === null ? defaultAvatar : this.props.userInfo.sLogo,
             }]
         }
     }

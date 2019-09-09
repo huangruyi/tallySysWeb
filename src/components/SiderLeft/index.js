@@ -62,7 +62,7 @@ class SiderLeft extends Component {
     initExpandSubMenu = () => {
         const { routeLinkurl } = this.props;
         const param = routeLinkurl.split('/');
-        if (param.length == 3) {
+        if (param.length === 3) {
             this.setState({
                 curOpenKey: '/' + param[1]
             })
@@ -77,7 +77,7 @@ class SiderLeft extends Component {
                 <div className="logo">
                     <img src={logo} />
                     {
-                        !collapsed && <span>TallySysWeb</span>
+                        !collapsed && <span>小金猪记账系统</span>
                     }
                 </div>
                 <Menu

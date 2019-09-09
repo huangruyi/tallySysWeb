@@ -8,7 +8,7 @@ export function* login() {
     while (true) {
         let request = yield take(LoginActions.USER_LOGIN);
         let response = yield call(get, api.JWTToken + '?username=' + request.username + "&password=" + request.password)
-        if (response && response.data.status == 1) {
+        if (response && response.data.status === 1) {
             const data = response.data.data;
             let Btoken = data["token_type"] + " " + data.token;
             let refreshTokenTime = new Date(data.timeStamp);
@@ -32,7 +32,7 @@ export function* getUserInfo() {
     while (true) {
         yield take(LoginActions.GET_USER_INFO);
         let response = yield call(axiosRest, 'get', api.user);
-        if (response && response.data.status == 1) {
+        if (response && response.data.status === 1) {
             const data = response.data.data;
             yield put({
                 type: LoginActions.SAVE_USER_INFO,

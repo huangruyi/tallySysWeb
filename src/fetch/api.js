@@ -13,6 +13,8 @@ const api = {
     spendingDetail: '/SpendingDetail',
     storageDetail: '/StorageDetail',
     tallyType: '/TallyType',
+    getParentType: '/TallyType/getParentType',
+    getTypeByTypeId: '/TallyType/getTypeByTypeId',
     user: '/User',
     modifyPassword: '/User/ModifyPassword',   
 };
