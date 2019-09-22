@@ -9,6 +9,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions as LoginActions } from '../../reducers/login'
 import { actions as IndexActions } from '../../reducers'
+import api from '../../fetch/api'
+import { axiosRest } from '../../fetch/fetch'
 import '../style.less'
 import '../reset.css'
 const { Header, Footer, Sider, Content } = Layout;
@@ -26,8 +28,20 @@ class Admin extends Component {
         } else {
             this.props.setTokenStatus(false);
         }
+        this.getTallyType()
 
     }
+
+    getTallyType = async () => {
+        const response = await axiosRest('get', api.getParentType);
+        if (response && response.data.status === 1) {
+            console.log('admin=====================')
+            console.log(response.data.data)
+            this.props.setTallyType(response.data.data)
+        }
+
+    }
+
 
     toggle = () => {
         this.setState({
@@ -83,7 +97,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         getUserInfo: bindActionCreators(LoginActions.getUserInfo, dispatch),
-        setTokenStatus: bindActionCreators(IndexActions.setTokenStatus, dispatch)
+        setTokenStatus: bindActionCreators(IndexActions.setTokenStatus, dispatch),
+        setTallyType: bindActionCreators(IndexActions.setTallyType, dispatch)
     }
 }
 

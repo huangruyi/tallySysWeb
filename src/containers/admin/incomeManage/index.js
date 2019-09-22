@@ -1,134 +1,231 @@
-import React, { Component } from 'react'
-import { Card, Col, Row, Button, Table, Form, Select } from 'antd'
-const { Option } = Select;
-import './style.less'
+import React, { Component, Fragment } from 'react'
+import Common from '../../../common/common'
+import api from '../../../fetch/api'
+import { axiosRest } from '../../../fetch/fetch'
+import { connect } from 'react-redux'
+import { bindActionCreator } from 'redux'
+import { actions as IndexActions } from '../../../reducers'
+import IncomeManageUI from './IncomeManageUI'
+import { message } from 'antd'
+const { CREATE, EDIT, DEL } = Common.opera
+const { income } = Common.code
+const { GET, POST, PUT, DELETE } = Common.action
+const { CREATE_TIP, EDIT_TIP, DELETE_TIP } = Common.tip
 class Income extends Component {
+
+    state = {
+        btnLoading: false,
+        isVisible: false,
+        isGetType: false,
+        dataSource: [],
+        tableLoading: true,
+    }
+
+    componentWillMount() {
+        this.getIncomeDetail()
+    }
+
+    getIncomeDetail = async () => {
+        const response = await axiosRest('get', api.incomeDetail);
+        if (response && response.data.status === 1) {
+            this.setState({
+                dataSource: response.data.data,
+                tableLoading: false
+            })
+        } else {
+            console.log(response)
+        }
+    }
+
+
+    getIncomeTypeId = () => {
+        const { tallyType } = this.props;
+        const result = tallyType.filter(item => {
+            return item.sCode === income;
+        })
+        const typeId = result[0].id
+        this.getIncomeType(typeId)
+    }
+
+    getIncomeType = async typeId => {
+        const response = await axiosRest(GET, api.getTypeByTypeId, {
+            typeId
+        });
+        if (response && response.data.status === 1) {
+            this.setState({
+                incomeType: response.data.data,
+                isGetType: true
+            })
+        }
+    }
+
+    handleOperator = operator => {
+        const { selectedItem } = this.state;
+        this.setState({
+            incomeDate: undefined
+        })
+        if (operator === CREATE) {
+            this.setState({
+                title: '新增收入',
+                isVisible: true,
+                operator: CREATE,
+                selectedItemInfo: null
+            })
+        } else if (operator === EDIT) {
+            if (!selectedItem) {
+                message.info('请选择一条数据');
+                return;
+            }
+            this.setState({
+                title: '编辑收入',
+                isVisible: true,
+                operator: EDIT,
+                selectedItemInfo: selectedItem
+            })
+
+        } else if (operator === DEL) {
+            if (!selectedItem) {
+                message.info('请选择一条数据');
+                return;
+            }
+            this.setState({
+                tableLoading: true
+            })
+            this.deleteIncome({
+                id: selectedItem.id
+            })
+        }
+    }
+
+    handleSubmit = form => {
+        const { operator, selectedItem, incomeDate } = this.state;
+        form.props.form.validateFields((err, values) => {
+            if (!err) {
+                form.props.form.resetFields();//表单重置
+                this.setState({ btnLoading: true })
+                if(incomeDate !== undefined) {
+                    values.dTime = incomeDate;
+                } else {
+                    values.dTime = values.dTime._i;
+                }             
+                if (operator === CREATE) {
+                    this.createIncome(values)
+                } else if (operator === EDIT) {
+                    values.id = selectedItem.id
+                    this.editIncome(values)
+                }
+            }
+        });
+    }
+
+    createIncome = async data => {
+        const { dataSource } = this.state;
+        const response = await axiosRest(POST, api.incomeDetail, data);
+        if (response && response.data.status === 1) {
+            message.success(CREATE_TIP);
+            this.setState({
+                btnLoading: false,
+                isVisible: false,
+                dataSource: [...dataSource, response.data.data]
+            })
+        } else {
+            message.error(response.data.detail);
+        }
+    }
+
+    editIncome = async data => {
+        const { dataSource } = this.state;
+        const response = await axiosRest(PUT, api.incomeDetail, data);
+        if (response && response.data.status === 1) {
+            const result = response.data.data;
+            message.success(EDIT_TIP);
+            dataSource.map(item => {
+                if (item.id === result.id) {
+                    item.fRmb = result.fRmb;
+                    item.dTime = result.dTime;
+                    item.sCodeName = result.sCodeName;
+                    item.sCode = result.sCode;
+                    item.sDesc = result.sDesc;
+                }
+            })
+            this.setState({
+                btnLoading: false,
+                isVisible: false,
+                dataSource
+            })
+        } else {
+            message.error(response.data.detail);
+        }
+    }
+
+    deleteIncome = async data => {
+        const { dataSource } = this.state;
+        const response = await axiosRest(DELETE, api.incomeDetail, data);
+        if (response && response.data.status === 1) {
+            message.success(DELETE_TIP);
+            this.setState({
+                dataSource: dataSource.filter(item => {
+                    return item.id !== response.data.data.id;
+                }),
+                selectedItem: null,
+                tableLoading: false
+            })
+        } else {
+            message.error(response.data.detail);
+        }
+    }
+
+    setSelectedRowKey = record => {
+        this.setState({
+            selectedItem: record
+        })
+    }
+
+    onChange = (date, dateString) => {
+        this.setState({
+            incomeDate: dateString
+        })
+    }
     render() {
-        const columns = [
-            {
-                title: '序号',
-                dataIndex: 'id',
-                key: 'id',
-            },
-            {
-                title: '元',
-                dataIndex: 'rmb',
-                key: 'rmb',
-            },
-            {
-                title: '类型',
-                dataIndex: 'code',
-                key: 'code',
-            },
-            {
-                title: '日期',
-                dataIndex: 'date',
-                key: 'date',
-            },
-            {
-                title: '描述',
-                dataIndex: 'desc',
-                key: 'desc',
-            },
-        ];
-        const dataSource = [
-            {
-                key: 0,
-                id: 0,
-                date: '2018-02-11',
-                rmb: 120,
-                code: 'income',
-                desc: 'transfer',
-            },
-            {
-                key: 1,
-                id: 1,
-                date: '2018-03-11',
-                rmb: 243,
-                code: 'income',
-                desc: 'transfer',
-            },
-            {
-                key: 2,
-                id: 2,
-                date: '2018-04-11',
-                rmb: 98,
-                code: 'income',
-                desc: 'transfer',
-            },
-        ]
+        const { title, isVisible, btnLoading, incomeType, isGetType, dataSource, tableLoading, selectedItemInfo } = this.state;
+        const { tallyType } = this.props;
         return (
-            <div>
-                <Card size='small' bordered={false}>
-                    <Button type="primary" icon="plus" className="btn">新增</Button>
-                    <Button icon="edit" className="btn">编辑</Button>
-                    <Button type="danger" icon="delete" className="btn">删除</Button>
-                    <div className="search">
-                        <SearchForm />
-                    </div>
-                </Card>
-                <Row gutter={16}>
-                    <Col span={14}>
-                        <Card
-                            title='收入详情'
-                            size='small'
-                        >
-                            <Table
-                                dataSource={dataSource}
-                                columns={columns}
-                                bordered
-                                size='small'
-                            />
-                        </Card>
-                    </Col>
-                    <Col span={10}>
-                        <Card
-                            title='图表展示'
-                            size='small'
-                        >
-                            Card content
-                        </Card>
-                    </Col>
-                </Row>
-            </div>
+            <Fragment>
+                {
+                    !isGetType && tallyType.length !== 0 && this.getIncomeTypeId()
+                }
+                <IncomeManageUI
+                    handleOperator={this.handleOperator}
+                    title={title}
+                    isVisible={isVisible}
+                    btnLoading={btnLoading}
+                    setVisible={flag => {
+                        this.setState({
+                            isVisible: flag
+                        })
+                    }}
+                    incomeType={incomeType}
+                    handleSubmit={this.handleSubmit}
+                    dataSource={dataSource}
+                    tableLoading={tableLoading}
+                    setSelectedRowKey={this.setSelectedRowKey}
+                    selectedItemInfo={selectedItemInfo}
+                    onChange={this.onChange}
+                />
+            </Fragment>
         )
     }
 }
 
-export default Income;
-
-class SearchForm extends Component {
-    render() {
-        const { getFieldDecorator } = this.props.form;
-        return (
-            <Form layout="inline" onSubmit={this.handleSubmit}>
-                <Form.Item label="收入类型">
-                    <Select
-                        value='all'
-                        style={{ width: 100 }}
-                    >
-                        <Option value="all">全部</Option>
-                        <Option value="gz">工资</Option>
-                        <Option value="sy">收益</Option>
-                        <Option value="other">其他</Option>
-                    </Select>
-                </Form.Item>
-                <Form.Item label="年份">
-                    <Select
-                        value='2018'
-                        style={{ width: 100 }}
-                    >
-                        <Option value="2018">2018</Option>
-                        <Option value="2019">2019</Option>
-                        <Option value="2020">2020</Option>
-                    </Select>
-                </Form.Item>
-                <Form.Item>
-                    <Button type="primary" icon="search">查询</Button>
-                </Form.Item>
-            </Form>
-        )
+function mapStateToProps(state) {
+    return {
+        tallyType: state.globalState.tallyType,
     }
 }
 
-SearchForm = Form.create()(SearchForm)
+export default connect(
+    mapStateToProps,
+    null
+)(Income);
+
+
