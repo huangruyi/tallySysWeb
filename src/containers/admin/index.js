@@ -35,19 +35,16 @@ class Admin extends Component {
     getTallyType = async () => {
         const response = await axiosRest('get', api.getParentType);
         if (response && response.data.status === 1) {
-            console.log('admin=====================')
-            console.log(response.data.data)
             this.props.setTallyType(response.data.data)
         }
-
     }
-
 
     toggle = () => {
         this.setState({
             collapsed: !this.state.collapsed,
         });
-    };
+    }
+
     render() {
         const { collapsed } = this.state;
         const { location, userInfo, isHasToken, isLoading, children, isGetUserInfo } = this.props;
@@ -77,7 +74,6 @@ class Admin extends Component {
                                     />
                             }
                         </Fragment>
-
                 }
             </Fragment>
 

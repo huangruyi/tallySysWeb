@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom'
 import { Menu, Icon } from 'antd'
 import logo from '../../../public/logo.png'
 import moduleList from '../../common/moduleConfig'
+import Common from '../../common/common'
 import './style.less'
 const { SubMenu } = Menu;
 class SiderLeft extends Component {
 
     state = {
-        curSelectKey: '/home',
+        curSelectKey: Common.HOME_URL,
         curOpenKey: ''
     }
 
@@ -61,10 +62,10 @@ class SiderLeft extends Component {
 
     initExpandSubMenu = () => {
         const { routeLinkurl } = this.props;
-        const param = routeLinkurl.split('/');
+        const param = routeLinkurl.split(Common.ROOT_URL);
         if (param.length === 3) {
             this.setState({
-                curOpenKey: '/' + param[1]
+                curOpenKey: Common.ROOT_URL + param[1]
             })
         }
     }
@@ -77,7 +78,7 @@ class SiderLeft extends Component {
                 <div className="logo">
                     <img src={logo} />
                     {
-                        !collapsed && <span>小金猪记账系统</span>
+                        !collapsed && <span>{Common.TITLE}</span>
                     }
                 </div>
                 <Menu
@@ -98,7 +99,10 @@ class SiderLeft extends Component {
     }
 
     componentDidMount = () => {
-        const { routeLinkurl } = this.props;
+        let { routeLinkurl } = this.props;
+        if (routeLinkurl === Common.ROOT_URL) {
+            routeLinkurl = Common.HOME_URL;
+        }
         this.setState({
             curSelectKey: routeLinkurl
         })

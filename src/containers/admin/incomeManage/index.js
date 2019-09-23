@@ -7,6 +7,10 @@ import { bindActionCreator } from 'redux'
 import { actions as IndexActions } from '../../../reducers'
 import IncomeManageUI from './IncomeManageUI'
 import { message } from 'antd'
+import echarts from 'echarts/lib/echarts'
+import 'echarts/lib/chart/bar'
+import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/title'
 const { CREATE, EDIT, DEL } = Common.opera
 const { income } = Common.code
 const { GET, POST, PUT, DELETE } = Common.action
@@ -19,6 +23,7 @@ class Income extends Component {
         isGetType: false,
         dataSource: [],
         tableLoading: true,
+        initYear: '2019'
     }
 
     componentWillMount() {
@@ -26,17 +31,37 @@ class Income extends Component {
     }
 
     getIncomeDetail = async () => {
-        const response = await axiosRest('get', api.incomeDetail);
+        const response = await axiosRest(GET, api.incomeDetail);
         if (response && response.data.status === 1) {
+            console.log(response.data.data)
+            this.handleData(response.data.data)
             this.setState({
                 dataSource: response.data.data,
                 tableLoading: false
             })
         } else {
-            console.log(response)
+            message.error(response.data.detail);
         }
     }
 
+    handleData = data => {
+        // console.log(this.state.pieX)
+        // const { pieX } = this.state
+        const pieX = []
+        const pieY = []
+        // let curResult = data.filter(item => {
+        //     if(item.sCodeName === pItem){
+        //         sum = sum + item.fRmb
+        //     }
+        // })
+        // data.map(item => {
+            
+        //     if(item.sCodeName === pItem){
+        //         sum = sum + item.fRmb
+        //     }
+        // })
+        console.log(pieY)
+    }
 
     getIncomeTypeId = () => {
         const { tallyType } = this.props;
@@ -52,10 +77,16 @@ class Income extends Component {
             typeId
         });
         if (response && response.data.status === 1) {
+            const result = response.data.data
+            let pieX = []
+            result.map(item => pieX.push(item.sName))
             this.setState({
-                incomeType: response.data.data,
-                isGetType: true
+                incomeType: result,
+                isGetType: true,
+                pieX
             })
+        } else {
+            message.error(response.data.detail);
         }
     }
 
@@ -186,6 +217,7 @@ class Income extends Component {
             incomeDate: dateString
         })
     }
+
     render() {
         const { title, isVisible, btnLoading, incomeType, isGetType, dataSource, tableLoading, selectedItemInfo } = this.state;
         const { tallyType } = this.props;
@@ -214,6 +246,28 @@ class Income extends Component {
                 />
             </Fragment>
         )
+    }
+
+    componentDidMount() {
+        // 基于准备好的dom，初始化echarts实例
+        let myChart = echarts.init(document.getElementById('income'));
+        this.setState({
+            myChart
+        })
+        // 绘制图表
+        myChart.setOption({
+            title: { text: '2019年收入统计' },
+            tooltip: {},
+            xAxis: {
+                data: ["工资", "收益", "其他"]
+            },
+            yAxis: {},
+            series: [{
+                name: '销量',
+                type: 'bar',
+                data: [5, 20, 36]
+            }]
+        });
     }
 }
 

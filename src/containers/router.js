@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {
+    Redirect,
     BrowserRouter as Router,
     Route,
     Switch,
@@ -12,7 +13,7 @@ import Forget from './user/forget'
 import Home from './admin/home'
 import Income from './admin/incomeManage'
 import Spending from './admin/spendingManage'
-import Storage from './admin/storageManage'
+import StorageManage from './admin/storageManage'
 import UserCenter from './admin/userCenter'
 import Type from './admin/typeManage'
 import NotFound from '../components/NotFound'
@@ -39,9 +40,13 @@ class IRouter extends Component {
                                     <Route path='/incomeManage' exact component={Income} />
                                     <Route path='/userCenter' exact component={UserCenter} />
                                     <Route path='/spendingManage' exact component={Spending} />
-                                    <Route path='/storageManage' exact component={Storage} />
+                                    <Route path='/storageManage' exact component={StorageManage} />
                                     <Route path='/typeManage' exact component={Type} />
                                     <Route path='/' exact component={Home} />
+                                    {/* {
+                                        //<Redirect from='/' to="/home" />
+                                    } */}
+                                    <Route component={NotFound} />
                                 </Switch>
                             </Admin>
                         } />

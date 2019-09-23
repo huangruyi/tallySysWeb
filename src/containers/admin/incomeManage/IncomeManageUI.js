@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Card, Col, Row, Button, Table, Form, Select, Modal, DatePicker, Input, InputNumber  } from 'antd'
+import { Card, Col, Row, Button, Table, Form, Select, Modal, DatePicker, Input, InputNumber } from 'antd'
 import Common from '../../../common/common'
 import moment from 'moment';
 import 'moment/locale/zh-cn';
@@ -32,7 +32,7 @@ class IncomeManageUI extends Component {
                 key: 'sDesc',
             },
         ];
-        const { handleOperator, title, isVisible, btnLoading, setVisible, incomeType, handleSubmit, dataSource, 
+        const { handleOperator, title, isVisible, btnLoading, setVisible, incomeType, handleSubmit, dataSource,
             tableLoading, setSelectedRowKey, selectedItemInfo, onChange } = this.props;
         const rowSelection = {
             type: 'radio',
@@ -70,7 +70,7 @@ class IncomeManageUI extends Component {
                             title='图表展示'
                             size='small'
                         >
-                            Card content
+                            <EchartUI />
                         </Card>
                     </Col>
                 </Row>
@@ -87,7 +87,7 @@ class IncomeManageUI extends Component {
                         setVisible(false)
                     }}
                 >
-                    <IncomwForm
+                    <IncomeForm
                         wrappedComponentRef={(inst) => this.incomeForm = inst}
                         incomeType={incomeType}
                         selectedItemInfo={selectedItemInfo}
@@ -133,10 +133,9 @@ class SearchForm extends Component {
         )
     }
 }
-
 SearchForm = Form.create()(SearchForm)
 
-class IncomwForm extends Component {
+class IncomeForm extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -166,7 +165,7 @@ class IncomwForm extends Component {
                                 rules: [{ required: true, message: '请输入收入金额!' }],
 
                             })(
-                                <InputNumber step={0.1} placeholder="请输入收入金额"/>
+                                <InputNumber step={0.1} placeholder="请输入收入金额" />
                             )
                         }
                     </FormItem>
@@ -203,4 +202,15 @@ class IncomwForm extends Component {
         )
     }
 }
-IncomwForm = Form.create()(IncomwForm)
+IncomeForm = Form.create()(IncomeForm)
+
+class EchartUI extends Component {
+    render() {
+        return (
+            <Fragment>               
+                <div className="incomeEchart" id="income" style={{ width: 400, height: 400 }}>
+                </div>
+            </Fragment>
+        )
+    }
+}

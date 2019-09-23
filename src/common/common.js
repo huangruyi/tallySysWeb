@@ -1,4 +1,4 @@
-// 布局
+// 公共布局
 const layout = {
     formItemLayout: {
         labelCol: {
@@ -30,9 +30,9 @@ const layout = {
         labelCol: { span: 8 },
         wrapperCol: { span: 10 }
     },
-    roleRowObject: { //角色管理使用
-        minRows: 20, maxRows: 24
-    },
+    // roleRowObject: { //角色管理使用
+    //     minRows: 20, maxRows: 24
+    // },
 }
 
 const opera = {
@@ -58,21 +58,27 @@ const code = {
     income: 'income'
 }
 
+// 记账类型管理
 const PARENT_CODE = '-1'
 const type = {
     PARENT: 'parent',
     CHILD: 'child'
 }
-const pagination = {
-    DEFAULT_PAGE_INDEX: 1, //默认请求第一页数据
-    DEFAULT_PAGE_SIZE: 15, //pageSize: 15
-}
-//角色权限树根节点的key
-const MODULE_ROOT = 'module_all'
+// const pagination = {
+//     DEFAULT_PAGE_INDEX: 1, //默认请求第一页数据
+//     DEFAULT_PAGE_SIZE: 15, //pageSize: 15
+// }
+
+const TITLE = '小金猪记账系统'
+const HOME_URL = '/home'
+const ROOT_URL = '/'
+
 export default {
     layout,
-    pagination,
-    MODULE_ROOT,
+    //pagination,
+    TITLE,
+    HOME_URL,
+    ROOT_URL,
     opera,
     code,
     action,
