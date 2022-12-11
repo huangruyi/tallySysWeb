@@ -64,7 +64,7 @@
     "compression": "^1.7.3",
     "connect-history-api-fallback": "^1.6.0",
     "exports-loader": "^0.7.0",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "http-proxy": "^1.17.0",
     "moment": "^2.24.0",
     "react": "^16.7.0",
